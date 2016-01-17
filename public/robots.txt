@@ -1,7 +1,2 @@
 User-agent: *
-Disallow: /form
-Disallow: /language
-Disallow: /files/*
-Disallow: /update
-
-Sitemap: http://www.ugho-stephan.fr/sitemap.xml
+Disallow: *
