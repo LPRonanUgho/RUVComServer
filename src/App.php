@@ -63,30 +63,22 @@ class App
 
             $target_path = $this->settings['picture_path'] . basename($_FILES['image']['name']);
 
-            $extension_upload = strtolower(  substr(  strrchr($_FILES['icone']['name'], '.')  ,1)  );
-            if ( in_array($extension_upload, $this->settings['extensions_valids']) === false ) {
+            try {
+                // Throws exception incase file is not being moved
+                if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
+                    // make error flag true
+                    $response['error'] = true;
+                    $response['message'] = "Could not move the file : " . $_FILES['image']['tmp_name'] . " to : " . $target_path;
+                } else {
+                    // File successfully uploaded
+                    $response['error'] = false;
+                    $response['data']['file_path'] = $this->settings['absolute_picture_path'] . basename($_FILES['image']['name']);
+                }
+            } catch (Exception $e) {
                 // Exception occurred. Make error flag true
                 $response['error'] = true;
-                $response['message'] = "Extension invalid";
-            }
-            else {
-                try {
-                    // Throws exception incase file is not being moved
-                    if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
-                        // make error flag true
-                        $response['error'] = true;
-                        $response['message'] = "Could not move the file : " . $_FILES['image']['tmp_name'] . " to : " . $target_path;
-                    } else {
-                        // File successfully uploaded
-                        $response['error'] = false;
-                        $response['data']['file_path'] = $this->settings['absolute_picture_path'] . basename($_FILES['image']['name']);
-                    }
-                } catch (Exception $e) {
-                    // Exception occurred. Make error flag true
-                    $response['error'] = true;
-                    $response['message'] = $e->getMessage();
-                }
-            }
+                $response['message'] = $e->getMessage();
+            }        
 
         } else {
             // File parameter is missing
