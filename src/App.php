@@ -92,7 +92,7 @@ class App
         return $response;
     }
 
-    private addPictureToDB($url) {
+    private function addPictureToDB($url) {
         $requete = $this->pdo->prepare("INSERT INTO Photo (id, url) VALUES (NULL, ?)");
         $requete->execute([$url]);
 
