@@ -1,5 +1,6 @@
 /vendor/
 /logs/*
+/public/picture_uploaded/*
 node_modules/
 .sass-cache/
 .idea/
