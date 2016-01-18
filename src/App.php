@@ -69,7 +69,7 @@ class App
                 if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
                     // make error flag true
                     $response['error'] = true;
-                    $response['message'] = "Could not move the file : " + json_encode($_FILES['image']);
+                    $response['message'] = "Could not move the file : " + $_FILES['image'];
                 } else {
                     // File successfully uploaded
                     $response['error'] = false;
