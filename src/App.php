@@ -8,6 +8,7 @@ class App
 {
     private $pdo;
     private $settings;
+    private $currentUserId;
 
     function __construct($settings) {
         $this->settings = $settings;
@@ -16,13 +17,13 @@ class App
         $this->pdo = $database->getPdo();
     }
 
-    // return true or false
     private function isValidUser($login, $password) {
         $requete = $this->pdo->prepare("SELECT id, login, firstname, lastname, email FROM User WHERE login = ? AND password = SHA1(?)");
         $requete->execute([$login, $password]);
         $result = $requete->fetch();
 
         if($result) {
+            $this->currentUserId = $result->id;
             return true;
         } else {
             return false;
@@ -72,13 +73,15 @@ class App
                 } else {
                     // File successfully uploaded
                     $response['error'] = false;
-                    $response['data']['file_path'] = $this->settings['absolute_picture_path'] . basename($_FILES['image']['name']);
+                    $url = $this->settings['absolute_picture_path'] . basename($_FILES['image']['name']);
+                    $response['data']['url'] = $url;
+                    $response['data']['id'] = $this->addPictureToDB($url);
                 }
             } catch (Exception $e) {
                 // Exception occurred. Make error flag true
                 $response['error'] = true;
                 $response['message'] = $e->getMessage();
-            }        
+            }
 
         } else {
             // File parameter is missing
@@ -87,5 +90,12 @@ class App
         }
 
         return $response;
+    }
+
+    private addPictureToDB($url) {
+        $requete = $this->pdo->prepare("INSERT INTO Photo (id, url) VALUES (NULL, ?)");
+        $requete->execute([$url]);
+
+        return $this->pdo->lastInsertId();
     }
 }
