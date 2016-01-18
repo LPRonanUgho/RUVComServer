@@ -64,7 +64,7 @@ class App
             $target_path = $this->settings['picture_path'] . basename($_FILES['image']['name']);
 
             $extension_upload = strtolower(  substr(  strrchr($_FILES['icone']['name'], '.')  ,1)  );
-            if ( !in_array($extension_upload, $this->settings['extensions_valids']) ) {
+            if ( in_array($extension_upload, $this->settings['extensions_valids']) === false ) {
                 // Exception occurred. Make error flag true
                 $response['error'] = true;
                 $response['message'] = "Extension invalid";
