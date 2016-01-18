@@ -1,11 +1,11 @@
 <?php
 $app->group('/api', function () {
 
-    $this->get('/login/{login}/{password}', function ($req, $res, $args) {
+    $this->post('/login/{login}/{password}', function ($req, $res, $args) {
         $this->result = $this->controleur->login($args['login'], $args['password']);
     });
 
-    $this->get('/uploadPicture/{login}/{password}', function ($req, $res, $args) {
+    $this->post('/uploadPicture/{login}/{password}', function ($req, $res, $args) {
         $this->result = $this->controleur->uploadFile($args['login'], $args['password']);
     });
 
