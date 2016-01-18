@@ -66,7 +66,7 @@ class App
             //$extension = end( explode(".", $_FILES["file"]["name"]) );
             //$path = $_FILES['image']['name'];
             $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $name = "IMG_" . md5(uniqid(rand(), true)) . $extension;
+            $name = "IMG_" . md5(uniqid(rand(), true)) . "." . $extension;
             $target_path = $this->settings['picture_path'] . $name;
 
             try {
