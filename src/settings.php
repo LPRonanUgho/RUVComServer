@@ -13,5 +13,12 @@ return [
             'name' => 'slim-app',
             'path' => __DIR__ . '/../logs/app.log',
         ],
+
+        // Settings for Controlleur
+        'config' => [
+            'base_url' => "http://dev.ugho-stephan.fr/",
+            'picture_path' => __DIR__ . '/../public/picture_uploaded/',
+            'absolute_picture_path' => 'http://dev.ugho-stephan.fr/picture_uploaded/',
+        ]
     ],
 ];

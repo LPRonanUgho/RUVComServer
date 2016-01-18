@@ -18,8 +18,8 @@ $container['logger'] = function ($c) {
 };
 
 // Controleur
-$container['controleur'] = function () {
-    return new App\App();
+$container['controleur'] = function ($c) {
+    return new App\App($c->get('settings')['config']);
 };
 
 // Result

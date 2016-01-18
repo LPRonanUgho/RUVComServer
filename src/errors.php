@@ -5,7 +5,7 @@ $container['notFoundHandler'] = function ($c) {
         // array for final json response
         $response = array();
         $response['error'] = true;
-        $response['message'] = "Not Found";
+        $response['message'] = "URL Not Found";
 
         return $c['response']
             ->withStatus(404)
@@ -20,7 +20,7 @@ $container['notAllowedHandler'] = function ($c) {
         // array for final json response
         $response = array();
         $response['error'] = true;
-        $response['message'] = "Method Not Allowed";
+        $response['message'] = "URL Method Not Allowed";
 
         return $c['response']
             ->withStatus(405)

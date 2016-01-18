@@ -1,19 +1,26 @@
 <?php
-/**
-* Routes with middleware
-*/
 $app->group('/api', function () {
 
-    $this->post('/login/{login}/{password}', function ($req, $res, $args) {
-        $this->result = $this->controleur->checkConnexion($args['login'], $args['password']);
+    $this->get('/login/{login}/{password}', function ($req, $res, $args) {
+        $this->result = $this->controleur->login($args['login'], $args['password']);
     });
 
-})->add(function ($request, $response, $next) {
+    $this->get('/uploadPicture/{login}/{password}', function ($req, $res, $args) {
+        $this->result = $this->controleur->uploadFile($args['login'], $args['password']);
+    });
+
+})
+->add(function ($request, $response, $next) {
+
     $response = $next($request, $response);
     $result = $this->result;
     $status = 200;
 
-    if($result['error']) {$status = 403;}
+    if(empty($result)) {
+        $status = 500;
+    } else if($result['error']) {
+        $status = 403;
+    }
 
     return $response
         ->withStatus($status)
