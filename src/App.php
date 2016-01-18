@@ -63,7 +63,9 @@ class App
         if (isset($_FILES['image']['name'])) {
 
             //$target_path = $this->settings['picture_path'] . basename($_FILES['image']['name']);
-            $extension = end((explode(".", $_FILES["file"]["name"])));
+            $extension = end((explode(".", $_FILES["file"]["name"]));
+            //$path = $_FILES['image']['name'];
+            //$ext = pathinfo($path, PATHINFO_EXTENSION);
             $name = "IMG_" . md5(uniqid(rand(), true)) . $extension;
             $target_path = $this->settings['picture_path'] . $name;
 
@@ -76,7 +78,7 @@ class App
                 } else {
                     // File successfully uploaded
                     $response['error'] = false;
-                    $url = $this->settings['absolute_picture_path'] . $name;                
+                    $url = $this->settings['absolute_picture_path'] . $name;
                     $response['data']['id'] = $this->addPictureToDB($url, $this->settings['picture_path'], $name, $_FILES['image']['size']);
                     $response['data']['url'] = $url;
                 }
@@ -96,7 +98,7 @@ class App
     }
 
     private function addPictureToDB($url, $serverpath, $name, $filesize) {
-        $requete = $this->pdo->prepare("INSERT INTO Photo (id, url, path, name, filesize) VALUES (NULL, ?, ?, ?)");
+        $requete = $this->pdo->prepare("INSERT INTO Photo (id, url, path, name, filesize) VALUES (NULL, ?, ?, ?, ?)");
         $requete->execute([$url, $serverpath, $name, $filesize]);
 
         return $this->pdo->lastInsertId();
