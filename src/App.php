@@ -75,7 +75,7 @@ class App
                     $response['error'] = false;
                     $url = $this->settings['absolute_picture_path'] . basename($_FILES['image']['name']);
                     $response['data']['url'] = $url;
-                    $response['data']['id'] = $this->addPictureToDB($url);
+                    $response['data']['id'] = $this->addPictureToDB($url, $target_path, $_FILES['image']['size']);
                 }
             } catch (Exception $e) {
                 // Exception occurred. Make error flag true
@@ -92,9 +92,9 @@ class App
         return $response;
     }
 
-    private function addPictureToDB($url) {
-        $requete = $this->pdo->prepare("INSERT INTO Photo (id, url) VALUES (NULL, ?)");
-        $requete->execute([$url]);
+    private function addPictureToDB($url, $serverpath, $filesize) {
+        $requete = $this->pdo->prepare("INSERT INTO Photo (id, url, serverPath, filesize) VALUES (NULL, ?, ?, ?)");
+        $requete->execute([$url, $serverpath, $filesize]);
 
         return $this->pdo->lastInsertId();
     }
