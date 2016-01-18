@@ -63,9 +63,9 @@ class App
         if (isset($_FILES['image']['name'])) {
 
             //$target_path = $this->settings['picture_path'] . basename($_FILES['image']['name']);
-            $extension = end( explode(".", $_FILES["file"]["name"]) );
+            //$extension = end( explode(".", $_FILES["file"]["name"]) );
             //$path = $_FILES['image']['name'];
-            //$ext = pathinfo($path, PATHINFO_EXTENSION);
+            $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
             $name = "IMG_" . md5(uniqid(rand(), true)) . $extension;
             $target_path = $this->settings['picture_path'] . $name;
 
