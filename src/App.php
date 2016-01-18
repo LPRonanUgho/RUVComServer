@@ -11,7 +11,6 @@ class App
 
     function __construct($settings) {
         $this->settings = $settings;
-        // to use : $this->settings['base_url'];
 
         $database = new Database();
         $this->pdo = $database->getPdo();
@@ -62,7 +61,7 @@ class App
 
         if (isset($_FILES['image']['name'])) {
 
-            $target_path = $this->settings['picture_uploaded'] . basename($_FILES['image']['name']);
+            $target_path = $this->settings['picture_path'] . basename($_FILES['image']['name']);
 
             try {
                 // Throws exception incase file is not being moved
