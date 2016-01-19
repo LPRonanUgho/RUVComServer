@@ -52,7 +52,7 @@ class App
 
     if($result) {
       $response['error'] = false;
-      $response['data'] = true;
+      $response['data'] = $result;
     } else {
       $response['error'] = true;
       $response['message'] = 'No user found !';
