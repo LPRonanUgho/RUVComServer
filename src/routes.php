@@ -4,12 +4,12 @@ $app->group('/api', function () {
         $this->result = $this->controleur->uploadFile($args['login'], $args['password']);
     });
 
-    $this->post('/createUser/{googleID}/{displayName}/{email}/{imageUrl}', function ($req, $res, $args) {
-        $this->result = $this->controleur->createUser($args['googleID'], $args['displayName'], $args['email'], $args['imageUrl'], $_POST['token']);
+    $this->post('/createUser/{googleID}/{displayName}/{email}', function ($req, $res, $args) {
+        $this->result = $this->controleur->createUser($args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['token']);
     });
 
-    $this->post('/updateUser/{id}/{googleID}/{displayName}/{email}/{imageUrl}', function ($req, $res, $args) {
-        $this->result = $this->controleur->updateUser($args['id'], $args['googleID'], $args['displayName'], $args['email'], $args['imageUrl'], $_POST['token']);
+    $this->post('/updateUser/{id}/{googleID}/{displayName}/{email}', function ($req, $res, $args) {
+        $this->result = $this->controleur->updateUser($args['id'], $args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['token']);
     });
 
     $this->get('/userExists/{googleID}', function ($req, $res, $args) {
