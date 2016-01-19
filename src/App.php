@@ -55,7 +55,7 @@ class App
       $response['data'] = true;
     } else {
       $response['error'] = true;
-      $response['data'] = 'No user found !';
+      $response['message'] = 'No user found !';
     }
 
     return $response;
