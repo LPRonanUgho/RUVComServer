@@ -33,7 +33,7 @@ $app->group('/api', function () {
     if(empty($result)) {
         $status = 500;
     } else if($result['error']) {
-        $status = 403;
+        $status = 202;
     }
 
     return $response
