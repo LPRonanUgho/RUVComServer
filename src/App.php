@@ -231,15 +231,14 @@ class App
     }
 
     $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
-    $result = $requete->execute([$idUserSender, $idUserReceiver, $message, $idPhoto]);
+    $result = $requete->execute([$idUserSender, $idUserReceiver, utf8_encode($message), $idPhoto]);
 
     if($result) {
       $response['error'] = false;
       $response['data'] = $this->getMessage($this->pdo->lastInsertId());
     } else {
       $response['error'] = true;
-      //$response['message'] = "Internal error !";
-      $response['message'] = "INSERT INTO Message VALUES (NULL, ".$idUserSender.", ".$idUserReceiver.", '".$message."', ".$idPhoto.", 0, NOW());";
+      $response['message'] = "Internal error !";
     }
 
     return $response;
