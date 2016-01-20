@@ -12,6 +12,10 @@ $app->group('/api', function () {
         $this->result = $this->controleur->updateUser($args['id'], $args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['coverImageUrl'], $_POST['token']);
     });
 
+    $this->post('/createMessage/{idUserSender}/{idUserReceiver}', function ($req, $res, $args) {
+        $this->result = $this->controleur->createMessage($args['idUserSender'], $args['idUserReceiver'], $_POST['message'], $_POST['idPhoto'], $_POST['token']);
+    });
+
     $this->get('/userExists/{googleID}', function ($req, $res, $args) {
         $this->result = $this->controleur->userExists($args['googleID']);
     });

@@ -137,6 +137,23 @@ class App
     return $response;
   }
 
+  public function getMessage($id) {
+    $response = array();
+
+    $requete = $this->pdo->prepare("SELECT * FROM Message WHERE id = ?;");
+    $requete->execute([$id]);
+    $result = $requete->fetch();
+
+    if($result) {
+      $response = $result;
+    } else {
+      $response['error'] = true;
+      $response['message'] = "No message found !";
+    }
+
+    return $response;
+  }
+
   public function createUser($googleID, $displayName, $email, $imageUrl, $coverImageUrl, $token) {
     // array for final json response
     $response = array();
@@ -173,6 +190,41 @@ class App
     if($result) {
       $response['error'] = false;
       $response['data'] = $this->getUser($id);
+    } else {
+      $response['error'] = true;
+      $response['message'] = "Internal error !";
+    }
+
+    return $response;
+  }
+
+  public function createMessage($idUserSender, $idUserReceiver, $message, $idPhoto, $token) {
+    // array for final json response
+    $response = array();
+
+    if ($this->checkToken($token)){
+      return $this->checkToken($token);
+    }
+
+    if (empty($idPhoto)) {
+        $idPhoto = null;
+    }
+
+    if (empty($message)) {
+        $message = null;
+    }
+
+    if ($message == null && $idPhoto == null) {
+        $response['message'] = "One parameter is require (between message or photo) !";
+        return $response;
+    }
+
+    $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
+    $result = $requete->execute([$idUserSender, $idUserReceiver, $message, $idPhoto]);
+
+    if($result) {
+      $response['error'] = false;
+      $response['data'] = $this->getMessage($this->pdo->lastInsertId());
     } else {
       $response['error'] = true;
       $response['message'] = "Internal error !";
