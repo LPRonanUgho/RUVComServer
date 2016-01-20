@@ -162,6 +162,20 @@ class App
     $requete->execute([$idUser, $idDistantUser, $idDistantUser, $idUser]);
     $result = $requete->fetchAll();
 
+    foreach ($result as $key => $message) {
+      if($message->idPhoto != null) {
+        $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
+        $requete->execute([$message->idPhoto]);
+        $photo = $requete->fetch();
+
+        $result[$key]->photo = $photo;
+      } else {
+        $result[$key]->photo = null;
+      }
+
+      unset($result[$key]->idPhoto);
+    }
+
     if($result) {
       $response['error'] = false;
       $response['data'] = $result;
@@ -231,7 +245,7 @@ class App
     }
 
     $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
-    $result = $requete->execute([$idUserSender, $idUserReceiver, utf8_encode($message), $idPhoto]);
+    $result = $requete->execute([$idUserSender, $idUserReceiver, trim(utf8_encode($message)), $idPhoto]);
 
     if($result) {
       $response['error'] = false;
