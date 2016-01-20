@@ -82,9 +82,17 @@ class App
   public function getConversations($idUser) {
     $response = array();
 
-    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserReceiver WHERE m.idUserSender = ? OR m.idUserReceiver = ? GROUP BY m.idUserReceiver HAVING m.idUserReceiver != ?;");
-    $requete->execute([$idUser, $idUser, $idUser]);
+    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserReceiver WHERE m.idUserSender = ? GROUP BY u.id;");
+    $requete->execute([$idUser]);
     $users = $requete->fetchAll();
+
+    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserSender WHERE m.idUserReceiver = ? GROUP BY u.id;");
+    $requete->execute([$idUser]);
+    while($user = $requete->fetch()) {
+      $users[] = $user;
+    }
+
+    $users = array_unique($users, SORT_REGULAR);
 
     $result = array();
     foreach ($users as $key => $user) {
