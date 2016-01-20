@@ -5,11 +5,11 @@ $app->group('/api', function () {
     });
 
     $this->post('/createUser/{googleID}/{displayName}/{email}', function ($req, $res, $args) {
-        $this->result = $this->controleur->createUser($args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['token']);
+        $this->result = $this->controleur->createUser($args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['coverImageUrl'], $_POST['token']);
     });
 
     $this->post('/updateUser/{id}/{googleID}/{displayName}/{email}', function ($req, $res, $args) {
-        $this->result = $this->controleur->updateUser($args['id'], $args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['token']);
+        $this->result = $this->controleur->updateUser($args['id'], $args['googleID'], $args['displayName'], $args['email'], $_POST['imageUrl'], $_POST['coverImageUrl'], $_POST['token']);
     });
 
     $this->get('/userExists/{googleID}', function ($req, $res, $args) {

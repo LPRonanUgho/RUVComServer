@@ -114,7 +114,7 @@ class App
     return $response;
   }
 
-  public function createUser($googleID, $displayName, $email, $imageUrl, $token) {
+  public function createUser($googleID, $displayName, $email, $imageUrl, $coverImageUrl, $token) {
     // array for final json response
     $response = array();
 
@@ -122,8 +122,8 @@ class App
       return $this->checkToken($token);
     }
 
-    $requete = $this->pdo->prepare("INSERT INTO User VALUES (NULL, ?, ?, ?, ?)");
-    $result = $requete->execute([$googleID, $displayName, $email, $imageUrl]);
+    $requete = $this->pdo->prepare("INSERT INTO User VALUES (NULL, ?, ?, ?, ?, ?);");
+    $result = $requete->execute([$googleID, $displayName, $email, $imageUrl, $coverImageUrl]);
 
     if($result) {
       $response['error'] = false;
@@ -136,7 +136,7 @@ class App
     return $response;
   }
 
-  public function updateUser($id, $googleID, $displayName, $email, $imageUrl, $token) {
+  public function updateUser($id, $googleID, $displayName, $email, $imageUrl, $coverImageUrl, $token) {
     // array for final json response
     $response = array();
 
@@ -144,8 +144,8 @@ class App
       return $this->checkToken($token);
     }
 
-    $requete = $this->pdo->prepare("UPDATE User SET googleID = ?, displayName = ?, email = ?, imageUrl = ? WHERE id = ?");
-    $result = $requete->execute([$googleID, $displayName, $email, $imageUrl, $id]);
+    $requete = $this->pdo->prepare("UPDATE User SET googleID = ?, displayName = ?, email = ?, imageUrl = ?, coverImageUrl = ? WHERE id = ?;");
+    $result = $requete->execute([$googleID, $displayName, $email, $imageUrl, $coverImageUrl, $id]);
 
     if($result) {
       $response['error'] = false;
