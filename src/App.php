@@ -239,7 +239,7 @@ class App
     } else {
       $response['error'] = true;
       //$response['message'] = "Internal error !";
-      $response['message'] = "INSERT INTO Message VALUES (NULL, ".$idUserSender.", ".$idUserReceiver.", '".$message."', ".$idPhoto.", 0, NOW());"
+      $response['message'] = "INSERT INTO Message VALUES (NULL, ".$idUserSender.", ".$idUserReceiver.", '".$message."', ".$idPhoto.", 0, NOW());";
     }
 
     return $response;
