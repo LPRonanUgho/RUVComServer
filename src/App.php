@@ -84,7 +84,22 @@ class App
 
     $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserReceiver WHERE m.idUserSender = ? OR m.idUserReceiver = ? GROUP BY m.idUserReceiver HAVING m.idUserReceiver != ?;");
     $requete->execute([$idUser, $idUser, $idUser]);
-    $result = $requete->fetchAll();
+    $users = $requete->fetchAll();
+
+    $result = array();
+    foreach ($users as $key => $user) {
+      $requete = $this->pdo->prepare("SELECT isRead FROM Message WHERE idUserSender = ? AND idUserReceiver = ? ORDER BY dateTime DESC LIMIT 1;");
+      $requete->execute([$user->id, $idUser]);
+      $lastMessageRead = $requete->fetch();
+
+      $notification = (!empty($lastMessageRead) && $lastMessageRead->isRead == 0) ? true : false;
+
+      $requete = $this->pdo->prepare("SELECT dateTime FROM Message WHERE (idUserSender = ? AND idUserReceiver = ?) OR (idUserSender = ? AND idUserReceiver = ?) ORDER BY dateTime DESC LIMIT 1;");
+      $requete->execute([$user->id, $idUser, $idUser, $user->id]);
+      $lastMessage = $requete->fetch();
+
+      $result[] = array("user" => $user, "notification" => $notification, "lastMessage" => $lastMessage->dateTime);
+    }
 
     if($result) {
       $response['error'] = false;
