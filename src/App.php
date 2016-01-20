@@ -144,6 +144,18 @@ class App
     $requete->execute([$id]);
     $result = $requete->fetch();
 
+    if($result->idPhoto != null) {
+      $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
+      $requete->execute([$message->idPhoto]);
+      $photo = $requete->fetch();
+
+      $result->photo = $photo;
+    } else {
+      $result->photo = null;
+    }
+
+    unset($result->idPhoto);
+
     if($result) {
       $response['error'] = false;
       $response = $result;
