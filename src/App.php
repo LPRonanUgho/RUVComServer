@@ -154,6 +154,12 @@ class App
       $result->photo = null;
     }
 
+    if($result->isRead == 1) {
+      $result->isRead = true;
+    } else {
+      $result->isRead = false;
+    }
+
     unset($result->idPhoto);
 
     if($result) {
@@ -186,6 +192,12 @@ class App
       }
 
       unset($result[$key]->idPhoto);
+
+      if($message->isRead == 1) {
+        $result[$key]->isRead = true;
+      } else {
+        $result[$key]->isRead = false;
+      }
     }
 
     if($result) {
