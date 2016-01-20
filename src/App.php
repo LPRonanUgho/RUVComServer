@@ -162,8 +162,6 @@ class App
     $requete->execute([$idUser, $idDistantUser, $idDistantUser, $idUser]);
     $result = $requete->fetchAll();
 
-    //die("SELECT * FROM Message WHERE (idUserSender = ".$idUser." AND idUserReceiver = ".$idDistantUser.") OR (idUserSender = ".$idDistantUser." AND idUserReceiver = ".$idUser.") ORDER BY dateTime DESC;");
-
     if($result) {
       $response['error'] = false;
       $response['data'] = $result;
@@ -240,7 +238,8 @@ class App
       $response['data'] = $this->getMessage($this->pdo->lastInsertId());
     } else {
       $response['error'] = true;
-      $response['message'] = "Internal error !";
+      //$response['message'] = "Internal error !";
+      $response['message'] = "INSERT INTO Message VALUES (NULL, ".$idUserSender.", ".$idUserReceiver.", '".$message."', ".$idPhoto.", 0, NOW());"
     }
 
     return $response;
