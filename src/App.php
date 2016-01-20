@@ -145,7 +145,28 @@ class App
     $result = $requete->fetch();
 
     if($result) {
+      $response['error'] = false;
       $response = $result;
+    } else {
+      $response['error'] = true;
+      $response['message'] = "No message found !";
+    }
+
+    return $response;
+  }
+
+  public function getMessages($idUser, $idDistantUser) {
+    $response = array();
+
+    $requete = $this->pdo->prepare("SELECT * FROM Message WHERE (idUserSender = ? AND idUserReceiver = ?) OR (idUserSender = ? AND idUserReceiver = ?) ORDER BY dateTime ASC;");
+    $requete->execute([$idUser, $idDistantUser, $idDistantUser, $idUser]);
+    $result = $requete->fetchAll();
+
+    //die("SELECT * FROM Message WHERE (idUserSender = ".$idUser." AND idUserReceiver = ".$idDistantUser.") OR (idUserSender = ".$idDistantUser." AND idUserReceiver = ".$idUser.") ORDER BY dateTime DESC;");
+
+    if($result) {
+      $response['error'] = false;
+      $response['data'] = $result;
     } else {
       $response['error'] = true;
       $response['message'] = "No message found !";
@@ -206,15 +227,7 @@ class App
       return $this->checkToken($token);
     }
 
-    if (empty($idPhoto)) {
-        $idPhoto = null;
-    }
-
-    if (empty($message)) {
-        $message = null;
-    }
-
-    if ($message == null && $idPhoto == null) {
+    if (empty($message) && empty($idPhoto)) {
         $response['message'] = "One parameter is require (between message or photo) !";
         return $response;
     }

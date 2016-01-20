@@ -20,6 +20,10 @@ $app->group('/api', function () {
         $this->result = $this->controleur->userExists($args['googleID']);
     });
 
+    $this->get('/getMessages/{userID}/{idDistantUser}', function ($req, $res, $args) {
+        $this->result = $this->controleur->getMessages($args['userID'], $args['idDistantUser']);
+    });
+
     $this->get('/getUsers', function ($req, $res, $args) {
         $this->result = $this->controleur->getUsers();
     });
