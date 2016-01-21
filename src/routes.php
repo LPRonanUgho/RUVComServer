@@ -16,6 +16,10 @@ $app->group('/api', function () {
         $this->result = $this->controleur->createMessage($args['idUserSender'], $args['idUserReceiver'], $_POST['message'], $_POST['idPhoto'], $_POST['token']);
     });
 
+    $this->post('/setMessageRead/{idUser}/{idDistantUser}', function ($req, $res, $args) {
+        $this->result = $this->controleur->setMessageRead($args['idUser'], $args['idDistantUser'], $_POST['token']);
+    });
+
     $this->get('/userExists/{googleID}', function ($req, $res, $args) {
         $this->result = $this->controleur->userExists($args['googleID']);
     });

@@ -58,7 +58,7 @@ class App
       $requete = $this->pdo->prepare("SELECT * FROM User;");
       $requete->execute();
     }
-    
+
     $result = $requete->fetchAll();
 
     if($result) {
@@ -267,6 +267,28 @@ class App
     if($result) {
       $response['error'] = false;
       $response['data'] = $this->getMessage($this->pdo->lastInsertId());
+    } else {
+      $response['error'] = true;
+      $response['message'] = "Internal error !";
+    }
+
+    return $response;
+  }
+
+  public function setMessageRead($idUser, $idDistantUser, $token) {
+    // array for final json response
+    $response = array();
+
+    if ($this->checkToken($token)){
+      return $this->checkToken($token);
+    }
+
+    $requete = $this->pdo->prepare("UPDATE Message SET isRead = 1 WHERE idUserSender = ? AND idUserReceiver = ?;");
+    $result = $requete->execute([$idDistantUser, $idUser]);
+
+    if($result) {
+      $response['error'] = false;
+      $response['data']['message'] = "Update successful";
     } else {
       $response['error'] = true;
       $response['message'] = "Internal error !";
