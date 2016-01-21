@@ -409,7 +409,7 @@ class App
       // Set POST variables
       $url = 'https://gcm-http.googleapis.com/gcm/send';
       $fields = array(
-        'registration_id' => $idDevice,
+        'to' => $idDevice,
         'data' => $message,
       );
       $headers = array(
