@@ -413,7 +413,7 @@ class App
         'data' => $message,
       );
       $headers = array(
-        'Authorization: key=ruvcom-1194' /*. $this->settings['googleApiKey']*/,
+        'Authorization: key=' . $this->settings['googleApiKey'],
         'Content-Type: application/json'
       );
       // Open connection
