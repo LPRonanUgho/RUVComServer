@@ -271,7 +271,7 @@ class App
       $response['data'] = $this->getMessage($idMessage);
 
       // Send push notification of message
-      $this->sendPushNotification($idUserReceiver, $idMessage);
+      //$this->sendPushNotification($idUserReceiver, $idMessage);
     } else {
       $response['error'] = true;
       $response['message'] = "Internal error !";
