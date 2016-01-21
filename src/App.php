@@ -137,25 +137,23 @@ class App
     $requete->execute([$id]);
     $result = $requete->fetch();
 
-    if(!empty($result)) {
-      if($result->idPhoto != null) {
-        $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
-        $requete->execute([$message->idPhoto]);
-        $photo = $requete->fetch();
+    if($result->idPhoto != null) {
+      $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
+      $requete->execute([$message->idPhoto]);
+      $photo = $requete->fetch();
 
-        $result->photo = $photo;
-      } else {
-        $result->photo = null;
-      }
-
-      if($result->isRead == 1) {
-        $result->isRead = true;
-      } else {
-        $result->isRead = false;
-      }
-
-      unset($result->idPhoto);
+      $result->photo = $photo;
+    } else {
+      $result->photo = null;
     }
+
+    if($result->isRead == 1) {
+      $result->isRead = true;
+    } else {
+      $result->isRead = false;
+    }
+
+    unset($result->idPhoto);
 
     if($result) {
       $response['error'] = false;
