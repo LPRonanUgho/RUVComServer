@@ -137,23 +137,25 @@ class App
     $requete->execute([$id]);
     $result = $requete->fetch();
 
-    if($result->idPhoto != null) {
-      $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
-      $requete->execute([$message->idPhoto]);
-      $photo = $requete->fetch();
+    if(!empty($result)) {
+      if($result->idPhoto != null) {
+        $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
+        $requete->execute([$message->idPhoto]);
+        $photo = $requete->fetch();
 
-      $result->photo = $photo;
-    } else {
-      $result->photo = null;
+        $result->photo = $photo;
+      } else {
+        $result->photo = null;
+      }
+
+      if($result->isRead == 1) {
+        $result->isRead = true;
+      } else {
+        $result->isRead = false;
+      }
+
+      unset($result->idPhoto);
     }
-
-    if($result->isRead == 1) {
-      $result->isRead = true;
-    } else {
-      $result->isRead = false;
-    }
-
-    unset($result->idPhoto);
 
     if($result) {
       $response['error'] = false;
@@ -257,8 +259,8 @@ class App
     }
 
     if (empty($message) && empty($idPhoto)) {
-        $response['message'] = "One parameter is require (between message or photo) !";
-        return $response;
+      $response['message'] = "One parameter is require (between message or photo) !";
+      return $response;
     }
 
     $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
@@ -266,7 +268,12 @@ class App
 
     if($result) {
       $response['error'] = false;
-      $response['data'] = $this->getMessage($this->pdo->lastInsertId());
+
+      $idMessage = $this->pdo->lastInsertId();
+      $response['data'] = $this->getMessage($idMessage);
+
+      // Send push notification of message
+      $this->sendPushNotification($idUserReceiver, $idMessage);
     } else {
       $response['error'] = true;
       $response['message'] = "Internal error !";
@@ -388,5 +395,42 @@ class App
     }
 
     return $response;
+  }
+
+  private function sendPushNotification($idUser, $idMessage) {
+    $requete = $this->pdo->prepare("SELECT idDevice FROM GCM WHERE idUser = ?;");
+    $requete->execute([$idUser]);
+    $ids_device = array();
+    while($idDevice = $requete->fetch()) {
+      $ids_device[] = $idDevice->idDevice;
+    }
+
+    $message = $this->getMessage($idMessage);
+
+    foreach ($ids_device as $key => $idDevice) {
+      // Set POST variables
+      $url = 'https://gcm-http.googleapis.com/gcm/send';
+      $fields = array(
+        'to' => $idDevice,
+        'data' => $message,
+      );
+      $headers = array(
+        'Authorization: key=' . $this->settings['googleApiKey'],
+        'Content-Type: application/json'
+      );
+      // Open connection
+      $ch = curl_init();
+      // Set the url, number of POST vars, POST data
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      // Disabling SSL Certificate support temporarly
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+      $result = curl_exec($ch);
+      curl_close($ch);
+    }
   }
 }
