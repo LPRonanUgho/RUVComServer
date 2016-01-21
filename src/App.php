@@ -428,6 +428,12 @@ class App
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 
       $result = curl_exec($ch);
+      if($result === FALSE) {
+        die('Curl failed : ' . curl_error($ch));
+      }
+
+      echo '<pre>'.$result.'</pre>';
+
       curl_close($ch);
     }
   }
