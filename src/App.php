@@ -271,7 +271,7 @@ class App
       $response['data'] = $this->getMessage($idMessage);
 
       // Send push notification of message
-      //$this->sendPushNotification($idUserReceiver, $idMessage);
+      $this->sendPushNotification($idUserReceiver, $idMessage);
     } else {
       $response['error'] = true;
       $response['message'] = "Internal error !";
@@ -395,7 +395,7 @@ class App
     return $response;
   }
 
-  public function sendPushNotification($idUser, $idMessage) {
+  private function sendPushNotification($idUser, $idMessage) {
     $requete = $this->pdo->prepare("SELECT idDevice FROM GCM WHERE idUser = ?;");
     $requete->execute([$idUser]);
     $ids_device = array();
@@ -428,11 +428,6 @@ class App
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 
       $result = curl_exec($ch);
-      if($result === FALSE) {
-        die('Curl failed : ' . curl_error($ch));
-      }
-
-      echo '<pre>'.$result.'</pre>';
 
       curl_close($ch);
     }

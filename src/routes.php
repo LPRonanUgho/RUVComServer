@@ -43,13 +43,6 @@ $app->group('/api', function () {
     $this->get('/getConversations/{idUser}', function ($req, $res, $args) {
         $this->result = $this->controleur->getConversations($args['idUser']);
     });
-
-
-    //----------
-
-    $this->get('/sendPushNotification/{idUser}/{idMessage}', function ($req, $res, $args) {
-        $this->result = $this->controleur->sendPushNotification($args['idUser'], $args['idMessage']);
-    });
 })
 ->add(function ($request, $response, $next) {
 
