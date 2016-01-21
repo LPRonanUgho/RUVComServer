@@ -28,6 +28,10 @@ $app->group('/api', function () {
         $this->result = $this->controleur->getUsers();
     });
 
+    $this->get('/getUsers/{idUser}', function ($req, $res, $args) {
+        $this->result = $this->controleur->getUsers($args['idUser']);
+    });
+
     $this->get('/getConversations/{idUser}', function ($req, $res, $args) {
         $this->result = $this->controleur->getConversations($args['idUser']);
     });

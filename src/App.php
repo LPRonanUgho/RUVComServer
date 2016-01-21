@@ -48,11 +48,17 @@ class App
     return $response;
   }
 
-  public function getUsers() {
+  public function getUsers($idUser) {
     $response = array();
 
-    $requete = $this->pdo->prepare("SELECT * FROM User;");
-    $requete->execute();
+    if(!empty($idUser)) {
+      $requete = $this->pdo->prepare("SELECT * FROM User WHERE id != ?;");
+      $requete->execute([$idUser]);
+    } else {
+      $requete = $this->pdo->prepare("SELECT * FROM User;");
+      $requete->execute();
+    }
+    
     $result = $requete->fetchAll();
 
     if($result) {
