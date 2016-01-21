@@ -1,7 +1,7 @@
 <?php
 $app->group('/api', function () {
-    $this->post('/uploadPicture/{login}/{password}', function ($req, $res, $args) {
-        $this->result = $this->controleur->uploadFile($args['login'], $args['password']);
+    $this->post('/uploadPicture/{idUserSender}/{idUserReceiver}', function ($req, $res, $args) {
+        $this->result = $this->controleur->uploadFile($args['idUserSender'], $args['idUserReceiver'], $_POST['token']);
     });
 
     $this->post('/createUser/{googleID}/{displayName}/{email}', function ($req, $res, $args) {

@@ -30,19 +30,6 @@ class App
     return $response;
   }
 
-  private function isValidUser($login, $password) {
-    $requete = $this->pdo->prepare("SELECT id, login, firstname, lastname, email FROM User WHERE login = ? AND password = SHA1(?)");
-    $requete->execute([$login, $password]);
-    $result = $requete->fetch();
-
-    if($result) {
-      $this->currentUserId = $result->id;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public function userExists($googleID) {
     $response = array();
 
@@ -282,20 +269,15 @@ class App
     return $response;
   }
 
-  public function uploadFile($login, $password) {
+  public function uploadFile($idUserSender, $idUserReceiver, $token) {
     // array for final json response
     $response = array();
 
-    if(!$this->isValidUser($login, $password)) {
-      $response['error'] = true;
-      $response['message'] = "User invalid";
-      return $response;
+    if ($this->checkToken($token)){
+      return $this->checkToken($token);
     }
 
     if (isset($_FILES['image']['name'])) {
-      //$target_path = $this->settings['picture_path'] . basename($_FILES['image']['name']);
-      //$extension = end( explode(".", $_FILES["file"]["name"]) );
-      //$path = $_FILES['image']['name'];
       $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
       $name = "IMG_" . md5(uniqid(rand(), true)) . "." . $extension;
       $target_path = $this->settings['picture_path'] . $name;
@@ -310,8 +292,10 @@ class App
           // File successfully uploaded
           $response['error'] = false;
           $url = $this->settings['absolute_picture_path'] . $name;
-          $response['data']['id'] = $this->addPictureToDB($url, $this->settings['picture_path'], $name, $_FILES['image']['size']);
-          $response['data']['url'] = $url;
+          $photoObj = $this->addPictureToDB($url, $this->settings['picture_path'], $name, $_FILES['image']['size']);
+
+          //Register messag into DB
+          $this->createMessage($idUserSender, $idUserReceiver, NULL, $photoObj->id, $token);
         }
       } catch (Exception $e) {
         // Exception occurred. Make error flag true
@@ -332,6 +316,12 @@ class App
     $requete = $this->pdo->prepare("INSERT INTO Photo (id, url, path, name, filesize) VALUES (NULL, ?, ?, ?, ?)");
     $requete->execute([$url, $serverpath, $name, $filesize]);
 
-    return $this->pdo->lastInsertId();
+    $lastPhotoInsertID = $this->pdo->lastInsertId();
+
+    $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
+    $requete->execute([$lastPhotoInsertID]);
+    $photo = $requete->fetch();
+
+    return $photo;
   }
 }
