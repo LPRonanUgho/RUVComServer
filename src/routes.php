@@ -24,6 +24,10 @@ $app->group('/api', function () {
         $this->result = $this->controleur->userExists($args['googleID']);
     });
 
+    $this->post('/registerGCM/{idUser}', function ($req, $res, $args) {
+        $this->result = $this->controleur->registerGCM($args['idUser'], $_POST['idDevice'], $_POST['token']);
+    });
+
     $this->get('/getMessages/{userID}/{idDistantUser}', function ($req, $res, $args) {
         $this->result = $this->controleur->getMessages($args['userID'], $args['idDistantUser']);
     });

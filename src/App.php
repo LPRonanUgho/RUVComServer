@@ -288,7 +288,7 @@ class App
 
     if($result) {
       $response['error'] = false;
-      $response['data']['message'] = "Update successful";
+      $response['data']['message'] = "Update successfully finish";
     } else {
       $response['error'] = true;
       $response['message'] = "Internal error !";
@@ -358,5 +358,35 @@ class App
     $photo = $requete->fetch();
 
     return $photo;
+  }
+
+  public function registerGCM($idUser, $idDevice, $token) {
+    // array for final json response
+    $response = array();
+
+    if ($this->checkToken($token)){
+      return $this->checkToken($token);
+    }
+
+    $requete = $this->pdo->prepare("SELECT * FROM GCM WHERE idUser = ? AND idDevice = ?;");
+    $requete->execute([$idUser, $idDevice]);
+    $exists = $requete->fetch();
+    if(empty($exists)) {
+      $requete = $this->pdo->prepare("INSERT INTO GCM VALUES(?, ?);");
+      $result = $requete->execute([$idUser, $idDevice]);
+
+      if($result) {
+        $response['error'] = false;
+        $response['data']['message'] = "Insert successfully finish !";
+      } else {
+        $response['error'] = true;
+        $response['message'] = "Internal error !";
+      }
+    } else {
+      $response['error'] = true;
+      $response['message'] = "Already register !";
+    }
+
+    return $response;
   }
 }
