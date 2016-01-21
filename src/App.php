@@ -296,6 +296,13 @@ class App
 
           //Register messag into DB
           $this->createMessage($idUserSender, $idUserReceiver, NULL, $photoObj->id, $token);
+
+          //Return message
+          $messageObj = $this->getMessage($this->pdo->lastInsertId());
+          $messageObj->photo = $photoObj;
+          unset($messageObj->idPhoto);
+          $response['data'] = $messageObj;
+
         }
       } catch (Exception $e) {
         // Exception occurred. Make error flag true
