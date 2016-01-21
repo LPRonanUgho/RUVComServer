@@ -395,7 +395,7 @@ class App
     return $response;
   }
 
-  private function sendPushNotification($idUser, $idMessage) {
+  public function sendPushNotification($idUser, $idMessage) {
     $requete = $this->pdo->prepare("SELECT idDevice FROM GCM WHERE idUser = ?;");
     $requete->execute([$idUser]);
     $ids_device = array();
