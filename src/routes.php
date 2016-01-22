@@ -44,7 +44,7 @@ $app->group('/api', function () {
         $this->result = $this->controleur->getConversations($args['idUser']);
     });
 
-    $this->get('/deleteGCM/{idUser}', function ($req, $res, $args) {
+    $this->post('/deleteGCM/{idUser}', function ($req, $res, $args) {
         $this->result = $this->controleur->deleteGCM($args['idUser'], $_POST['token']);
     });
 })
