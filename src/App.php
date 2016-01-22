@@ -302,7 +302,7 @@ class App
     return $response;
   }
 
-  public function uploadFile($idUserSender, $idUserReceiver, $geoLat, $geoLong, $token) {
+  public function uploadFile($idUserSender, $idUserReceiver, $token, $geoLat= null, $geoLong = null) {
     // array for final json response
     $response = array();
 
