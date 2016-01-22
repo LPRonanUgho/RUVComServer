@@ -43,6 +43,10 @@ $app->group('/api', function () {
     $this->get('/getConversations/{idUser}', function ($req, $res, $args) {
         $this->result = $this->controleur->getConversations($args['idUser']);
     });
+
+    $this->get('/deleteGCM/{idUser}', function ($req, $res, $args) {
+        $this->result = $this->controleur->deleteGCM($args['idUser'], $_POST['token']);
+    });
 })
 ->add(function ($request, $response, $next) {
 

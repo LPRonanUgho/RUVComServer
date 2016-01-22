@@ -395,6 +395,28 @@ class App
     return $response;
   }
 
+  public function deleteGCM($idUser, $token) {
+    // array for final json response
+    $response = array();
+
+    if ($this->checkToken($token)){
+      return $this->checkToken($token);
+    }
+
+    $requete = $this->pdo->prepare("DELETE FROM GCM WHERE idUser = ?;");
+    $result = $requete->execute([$idUser]);
+
+    if($result) {
+      $response['error'] = false;
+      $response['data']['message'] = "Insert successfully finish !";
+    } else {
+      $response['error'] = true;
+      $response['message'] = "Internal error !";
+    }
+
+    return $response;
+  }
+
   private function sendPushNotification($idUser, $idMessage) {
     $requete = $this->pdo->prepare("SELECT idDevice FROM GCM WHERE idUser = ?;");
     $requete->execute([$idUser]);
