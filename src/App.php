@@ -75,11 +75,11 @@ class App
   public function getConversations($idUser) {
     $response = array();
 
-    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserReceiver WHERE m.idUserSender = ? GROUP BY u.id ORDER BY dateTime ASC;");
+    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserReceiver WHERE m.idUserSender = ? GROUP BY u.id;");
     $requete->execute([$idUser]);
     $users = $requete->fetchAll();
 
-    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserSender WHERE m.idUserReceiver = ? GROUP BY u.id ORDER BY dateTime ASC;");
+    $requete = $this->pdo->prepare("SELECT u.* FROM Message m INNER JOIN User u ON u.id = m.idUserSender WHERE m.idUserReceiver = ? GROUP BY u.id;");
     $requete->execute([$idUser]);
     while($user = $requete->fetch()) {
       $users[] = $user;
@@ -139,7 +139,7 @@ class App
 
     if($result->idPhoto != null) {
       $requete = $this->pdo->prepare("SELECT * FROM Photo WHERE id = ?;");
-      $requete->execute([$message->idPhoto]);
+      $requete->execute([$result->idPhoto]);
       $photo = $requete->fetch();
 
       $result->photo = $photo;
@@ -404,6 +404,12 @@ class App
     }
 
     $message = $this->getMessage($idMessage);
+
+    $requete = $this->pdo->prepare("SELECT * FROM User WHERE id = ?;");
+    $requete->execute([$message->idUserSender]);
+    $sender = $requete->fetch();
+
+    $message->userSender = $sender;
 
     foreach ($ids_device as $key => $idDevice) {
       // Set POST variables
