@@ -302,7 +302,7 @@ class App
     return $response;
   }
 
-  public function uploadFile($idUserSender, $idUserReceiver, $token) {
+  public function uploadFile($idUserSender, $idUserReceiver, $geoLat, $geoLong, $token) {
     // array for final json response
     $response = array();
 
@@ -325,7 +325,7 @@ class App
           // File successfully uploaded
           $response['error'] = false;
           $url = $this->settings['absolute_picture_path'] . $name;
-          $photoObj = $this->addPictureToDB($url, $this->settings['picture_path'], $name, $_FILES['image']['size']);
+          $photoObj = $this->addPictureToDB($url, $this->settings['picture_path'], $name, $_FILES['image']['size'], $geoLat, $geoLong);
 
           //Register messag into DB
           $this->createMessage($idUserSender, $idUserReceiver, NULL, $photoObj->id, $token);
@@ -352,9 +352,9 @@ class App
     return $response;
   }
 
-  private function addPictureToDB($url, $serverpath, $name, $filesize) {
-    $requete = $this->pdo->prepare("INSERT INTO Photo (id, url, path, name, filesize) VALUES (NULL, ?, ?, ?, ?)");
-    $requete->execute([$url, $serverpath, $name, $filesize]);
+  private function addPictureToDB($url, $serverpath, $name, $filesize, $geoLat, $geoLong) {
+    $requete = $this->pdo->prepare("INSERT INTO Photo VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    $requete->execute([$url, $serverpath, $name, $filesize, $geoLat, $geoLong]);
 
     $lastPhotoInsertID = $this->pdo->lastInsertId();
 
