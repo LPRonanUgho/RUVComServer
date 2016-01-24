@@ -1,6 +1,7 @@
 /vendor/
 /logs/*
 /public/picture_uploaded/*
+/public/apk/*
 node_modules/
 .sass-cache/
 .idea/
