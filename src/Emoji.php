@@ -9924,12 +9924,8 @@ class Emoji
 	public function emoji_unified_to_html($text) { return $this->emoji_convert($text, 'unified_to_html'); }
 	public function emoji_html_to_unified($text) { return $this->emoji_convert($text, 'html_to_unified'); }
 
-	public function emoji_convert($text, $map) {
-		return str_replace(
-					array_keys($this->emojis['emoji_maps'][$map]),
-					$this->emojis['emoji_maps'][$map],
-					$text
-				);
+	private function emoji_convert($text, $map) {
+		return str_replace(array_keys($this->emojis['emoji_maps'][$map]),$this->emojis['emoji_maps'][$map],$text);
 	}
 
 	public function emoji_get_name($unified_cp) {
