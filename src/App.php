@@ -155,7 +155,7 @@ class App
       $result->isRead = false;
     }
 
-    $result->message = $this->emoji->emoji_unified_to_google($result->message);
+    //$result->message = $this->emoji->emoji_unified_to_google($result->message);
 
     unset($result->idPhoto);
 
@@ -188,7 +188,7 @@ class App
         $result[$key]->photo = null;
       }
 
-      $result[$key]->message = $this->emoji->emoji_unified_to_google($result[$key]->message);
+      //$result[$key]->message = $this->emoji->emoji_unified_to_google($result[$key]->message);
 
       unset($result[$key]->idPhoto);
 
