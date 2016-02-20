@@ -9,12 +9,14 @@ class App
   private $pdo;
   private $settings;
   private $currentUserId;
+  private $emoji;
 
   function __construct($settings) {
     $this->settings = $settings;
 
     $database = new Database();
     $this->pdo = $database->getPdo();
+    $this->emoji = new Emoji();
   }
 
   private function checkToken($token){
@@ -153,7 +155,7 @@ class App
       $result->isRead = false;
     }
 
-    $result->message = html_entity_decode($result->message);
+    $result->message = $this->emoji->emoji_unified_to_google($result->message);
 
     unset($result->idPhoto);
 
@@ -186,7 +188,7 @@ class App
         $result[$key]->photo = null;
       }
 
-      $result[$key]->message = html_entity_decode($result[$key]->message);
+      $result[$key]->message = $this->emoji->emoji_unified_to_google($result[$key]->message);
 
       unset($result[$key]->idPhoto);
 
@@ -266,7 +268,7 @@ class App
     }
 
     $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
-    $result = $requete->execute([$idUserSender, $idUserReceiver, htmlentities($message), $idPhoto]);
+    $result = $requete->execute([$idUserSender, $idUserReceiver, $this->emoji->emoji_google_to_unified($message), $idPhoto]);
 
     if($result) {
       $response['error'] = false;
