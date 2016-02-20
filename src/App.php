@@ -272,7 +272,7 @@ class App
     }
 
     $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
-    $result = $requete->execute([$idUserSender, $idUserReceiver, $this->emoji->emoji_google_to_unified($message), $idPhoto]);
+    $result = $requete->execute([$idUserSender, $idUserReceiver, $message, $idPhoto]);
 
     if($result) {
       $response['error'] = false;
