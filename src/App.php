@@ -9,14 +9,12 @@ class App
   private $pdo;
   private $settings;
   private $currentUserId;
-  private $emoji;
 
   function __construct($settings) {
     $this->settings = $settings;
 
     $database = new Database();
     $this->pdo = $database->getPdo();
-    $this->emoji = new Emoji();
   }
 
   private function checkToken($token){
@@ -155,8 +153,6 @@ class App
       $result->isRead = false;
     }
 
-    //$result->message = $this->emoji->emoji_unified_to_google($result->message);
-
     unset($result->idPhoto);
 
     if($result) {
@@ -187,8 +183,6 @@ class App
       } else {
         $result[$key]->photo = null;
       }
-
-      //$result[$key]->message = $this->emoji->emoji_unified_to_google($result[$key]->message);
 
       unset($result[$key]->idPhoto);
 
