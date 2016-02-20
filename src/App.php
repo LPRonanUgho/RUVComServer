@@ -153,6 +153,8 @@ class App
       $result->isRead = false;
     }
 
+    $result->message = html_entity_decode($result->message);
+
     unset($result->idPhoto);
 
     if($result) {
@@ -183,6 +185,8 @@ class App
       } else {
         $result[$key]->photo = null;
       }
+
+      $result[$key]->message = html_entity_decode($result[$key]->message);
 
       unset($result[$key]->idPhoto);
 
@@ -262,7 +266,7 @@ class App
     }
 
     $requete = $this->pdo->prepare("INSERT INTO Message VALUES (NULL, ?, ?, ?, ?, 0, NOW());");
-    $result = $requete->execute([$idUserSender, $idUserReceiver, trim(utf8_encode($message)), $idPhoto]);
+    $result = $requete->execute([$idUserSender, $idUserReceiver, htmlentities($message), $idPhoto]);
 
     if($result) {
       $response['error'] = false;
