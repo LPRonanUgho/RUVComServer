@@ -324,7 +324,7 @@ class App
             'url' => $picture->url,
             'path' => $picture->path,
             'name' => $picture->name,
-            'fieSize' => $picture->filesize,
+            'filesize' => $picture->filesize,
             'geoLat' => $picture->geoLat,
             'geoLong' => $picture->geoLong
           ]
