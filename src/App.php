@@ -314,8 +314,6 @@ class App
     $requete->execute([$idUser]);
     $result = $requete->fetchAll();
 
-    var_dump($result);
-
     if($result) {
       $response['error'] = false;
       foreach ($result as $key => $picture) {
