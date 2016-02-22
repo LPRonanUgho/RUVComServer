@@ -314,6 +314,8 @@ class App
     $requete->execute([$idUser]);
     $result = $requete->fetchAll();
 
+    var_dump($result);
+
     if($result) {
       $response['error'] = false;
       foreach ($result as $key => $picture) {
@@ -332,7 +334,7 @@ class App
       }
     } else {
       $response['error'] = true;
-      $response['message'] = "Internal error !";
+      $response['message'] = "No pictures found !";
     }
 
     return $response;
