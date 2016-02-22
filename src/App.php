@@ -306,6 +306,39 @@ class App
     return $response;
   }
 
+  public function locatesPictures($idUser) {
+    // array for final json response
+    $response = array();
+
+    $requete = $this->pdo->prepare("SELECT u.displayName, p.* FROM Message m INNER JOIN Photo p ON p.id = m.idPhoto INNER JOIN User u ON u.id = m.idUserSender WHERE idUserReceiver = ? AND geoLat IS NOT NULL AND geoLong IS NOT NULL;");
+    $requete->execute([$idUser]);
+    $result = $requete->fetchAll();
+
+    if($result) {
+      $response['error'] = false;
+      foreach ($result as $key => $picture) {
+        $response['data'][] = (object)[
+          "displayName" => $picture->displayName,
+          "photo" => (object)[
+            'id' => $picture->id,
+            'url' => $picture->url,
+            'path' => $picture->path,
+            'name' => $picture->name,
+            'fieSize' => $picture->filesize,
+            'geoLat' => $picture->geoLat,
+            'geoLong' => $picture->geoLong
+          ]
+        ];
+      }
+    } else {
+      $response['error'] = true;
+      $response['message'] = "Internal error !";
+    }
+
+    return $response;
+  }
+
+
   public function uploadFile($idUserSender, $idUserReceiver, $token, $geoLat= null, $geoLong = null) {
     // array for final json response
     $response = array();

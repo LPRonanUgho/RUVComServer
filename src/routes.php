@@ -51,6 +51,11 @@ $app->group('/api', function () {
   $this->post('/deleteGCM/{idUser}', function ($req, $res, $args) {
     $this->result = $this->controleur->deleteGCM($args['idUser'], $_POST['token']);
   });
+
+  $this->get('/locatesPictures/{idUser}', function($req, $res, $args) {
+    $this->result = $this->controleur->locatesPictures($args['idUser']);
+  });
+
 })
 ->add(function ($request, $response, $next) {
 
