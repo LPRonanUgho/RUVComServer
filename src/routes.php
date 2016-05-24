@@ -1,6 +1,6 @@
 <?php
 $app->group('/api', function () {
-    
+
     $this->post('/uploadPicture/{idUserSender}/{idUserReceiver}/{geoLat}/{geoLong}', function ($req, $res, $args) {
         $this->result = $this->controleur->uploadFile($args['idUserSender'], $args['idUserReceiver'], $_POST['token'], $args['geoLat'], $args['geoLong']);
     });
@@ -47,10 +47,6 @@ $app->group('/api', function () {
 
     $this->get('/getConversations/{idUser}', function ($req, $res, $args) {
         $this->result = $this->controleur->getConversations($args['idUser']);
-    });
-
-    $this->post('/deleteGCM/{idUser}', function ($req, $res, $args) {
-        $this->result = $this->controleur->deleteGCM($args['idUser'], $_POST['token']);
     });
 
     $this->post('/deleteGCM/{idUser}', function ($req, $res, $args) {
