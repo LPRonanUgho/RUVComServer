@@ -75,7 +75,7 @@ $app->group('/api', function () {
 })
 ->add(function ($request, $response, $next) {
 
-    die(print_r(getallheaders(), true));
+    //die(print_r(getallheaders(), true));
 
     $response = $next($request, $response);
     $result = $this->result;
